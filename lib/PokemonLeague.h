@@ -8,7 +8,7 @@
 using namespace std;
 
 /* Language Macros */
-#define BEGIN_GAME vector <Pokemon> Pokemon::p_vec;vector <Ability> Ability::a_vec;int main(){cout<<""
+#define BEGIN_GAME int a;int _;int turn=1;Player player1("Player 1");Player player2("Player 2");vector <Pokemon> Pokemon::p_vec;vector <Ability> Ability::a_vec;int main(){turn=1
 #define END_GAME ;return 0;}
 #define CREATE ;
 #define POKEMON Pokemon
@@ -20,13 +20,18 @@ using namespace std;
 #define START []()->void{
 #define END ;}
 
-
-
-
 #define NAME false? ""
 #define TYPE false? ""
 #define HP false? 0
 #define ACTION false?[]()->void{}
+
+#define ATTACKER (turn==1?player1.getCurrentPokemon():player2.getCurrentPokemon()),
+#define DEFENDER (turn==2?player1.getCurrentPokemon():player2.getCurrentPokemon()),
+
+#define DAMAGE damage(
+#define HEAL  heal(
+
+
 
 
 /* Pokemon Type*/
@@ -38,6 +43,26 @@ typedef enum {
     Grass
 }Type;
 
+class Player{
+    private:
+        string name;
+        vector <Pokemon> p_vec;
+        Pokemon* currentPokemon;
+        Player* opponent;
+    public:
+        Player()=default;
+        Player(string _name);
+        string getName() const;
+        vector <Pokemon> getP_vec() const;
+        Player* getOpponent() const;
+        void setName(string name);
+        void setP_vec(vector <Pokemon> p_vec);
+        void setOpponent(Player* opponent);
+        void addPokemon(Pokemon p);
+        void givePokemon(string p);
+        void setCurrentPokemon(Pokemon* currentPokemon);
+        Pokemon* getCurrentPokemon() const;
+};
 class Pokemon{
     public:
         Pokemon();
@@ -53,11 +78,13 @@ class Pokemon{
         Pokemon operator,(Pokemon a);
         Pokemon operator[](Pokemon a);
         static vector <Pokemon> p_vec;
+        void setOwner(Player* owner);
     private:
         string name;
         Type type;
         unsigned hp;
         vector <Pokemon> vec;
+        Player* owner;
 };
 
 /* Pokemon Class */
@@ -86,4 +113,6 @@ class Ability{
         void setFunc(function<void()> func);
         void setVec(vector<Ability> vec);
 };
+void damage(Pokemon,int);
+void heal(Pokemon,int);
 #endif // POKEMON_LEAGUE_H

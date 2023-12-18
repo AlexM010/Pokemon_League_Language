@@ -79,7 +79,9 @@ Type Pokemon::getType() const{
 vector <Pokemon> Pokemon::getVec() const{
     return vec;
 }
-
+void Pokemon::setOwner(Player* owner){
+    this->owner = owner;
+}
 //ability
 Ability::Ability(string _name, function<void()>_func): name(_name), func(_func) {
     if (name.empty()) {
@@ -118,4 +120,52 @@ void Ability::print() const{
         cout << "Ability: " << vec[i].name << endl;
     }
 }
-
+Player::Player(string _name): name(_name){
+    if (name.empty()) {
+        throw std::invalid_argument("Player name cannot be empty");
+    }
+}
+void Player::addPokemon(Pokemon p){
+    p_vec.push_back(p);
+    p.setOwner(this);
+}
+void Player::givePokemon(string p){
+    for (unsigned i = 0; i < p_vec.size(); i++) {
+        if (p_vec[i].getName() == p) {
+            opponent->addPokemon(p_vec[i]);
+            p_vec[i].setOwner(opponent);
+            p_vec.erase(p_vec.begin() + i);
+            break;
+        }
+    }
+}
+string Player::getName() const{
+    return name;
+}
+vector <Pokemon> Player::getP_vec() const{
+    return p_vec;
+}
+Player* Player::getOpponent() const{
+    return opponent;
+}
+void Player::setName(string name){
+    this->name = name;
+}
+void Player::setP_vec(vector <Pokemon> p_vec){
+    this->p_vec = p_vec;
+}
+void Player::setOpponent(Player* opponent){
+    this->opponent = opponent;
+}
+void Player::setCurrentPokemon(Pokemon* currentPokemon){
+    this->currentPokemon = currentPokemon;
+}
+Pokemon* Player::getCurrentPokemon() const{
+    return currentPokemon;
+}
+void damage(Pokemon* p,int hp){
+    p->setHp(p->getHp() - hp);
+}
+void heal(Pokemon* p,int hp){
+    p->setHp(p->getHp() + hp);
+}

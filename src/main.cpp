@@ -1,7 +1,6 @@
 #include "../lib/PokemonLeague.h"
 
 BEGIN_GAME
-   
     CREATE POKEMON{
         NAME:"Pikachu",
         TYPE:"Electric",

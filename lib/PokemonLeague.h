@@ -8,7 +8,7 @@
 using namespace std;
 
 /* Language Macros */
-#define BEGIN_GAME Dummy α(1);Dummy _(0);int k=0;int turn=1;Player player1("Player 1");Player player2("Player 2");vector <Pokemon> Pokemon::p_vec;vector <Ability> Ability::a_vec;int main(){turn=1
+#define BEGIN_GAME Dummy α(1);Dummy _(0);int k=0;int turn=1;int rounds=0;Player player1("Player 1");Player player2("Player 2");vector <Pokemon> Pokemon::p_vec;vector <Ability> Ability::a_vec;int main(){turn=1
 #define END_GAME ;return 0;}
 #define CREATE ;
 #define POKEMON Pokemon
@@ -18,7 +18,8 @@ using namespace std;
 
 
 #define START []()->void{Dummy(
-#define END );}
+
+
 
 #define NAME false? ""
 #define TYPE false? ""
@@ -42,6 +43,12 @@ using namespace std;
 
 
 #define IF );if(
+
+#define END );}Dummy(
+#define END_A );}
+
+
+
 #define ELSE_IF );}else if(
 #define ELSE );}else{Dummy(
 #define DO ){Dummy(
@@ -49,7 +56,6 @@ using namespace std;
 #define OR(x,y)     (x or y)
 #define NOT(x)      (not x)
 #define SHOW cout<<
-#define ENDIF );}
 
 
 

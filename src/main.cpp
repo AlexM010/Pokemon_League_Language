@@ -36,17 +36,21 @@ BEGIN_GAME
             ELSE
                 HEAL ATTACKER 15
             END
-        END
+        END_A
     }
     CREATE ABILITY {
         NAME: "Solar_Power",
         ACTION: START
             POKEBALL ATTACKER ---α
             DAMAGE DEFENDER 20
-        END
+            IF AND (GET_HP(DEFENDER) > 30, GET_HP(DEFENDER) < 70) DO
+                DAMAGE DEFENDER 20
+            END
+            DAMAGE ATTACKER 20
+        END_A
     }
     CREATE ABILITIES [
-        ABILITY {
+        ABILITY{
             NAME: "Electric_Shock",
             ACTION: START
                 IF GET_HP(ATTACKER) < 30 DO
@@ -54,13 +58,13 @@ BEGIN_GAME
                 ELSE
                     HEAL ATTACKER 15
                 END
-            END
+            END_A
         },
         ABILITY {
             NAME: "Blaze",
             ACTION: START
                 DAMAGE DEFENDER 22
-            END
+            END_A
         }
     ]
     // CREATE ABILITY {

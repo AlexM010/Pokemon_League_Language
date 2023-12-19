@@ -5,7 +5,7 @@ Domain-specific language for Pokemon fight simulations that is compiled with C++
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
-- A modern C++ compiler that supports C++11. For example, GCC 4.8.1 or later, or Clang 3.3 or later.
+- A modern C++ compiler. For example, GCC 10 or later.
 - Make sure you have installed the latest version of [CMake](https://cmake.org/download/).
 
 ### Installation

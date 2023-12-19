@@ -1,4 +1,4 @@
-#include "PokemonLeague.h"
+﻿#include "PokemonLeague.h"
 
 Pokemon::Pokemon(){
     name = "";
@@ -28,7 +28,7 @@ void Pokemon::print() const{
         cout << "HP: " << vec[i].hp << endl;
     }
 }
-std::string PokemonTypeToString(Type type) {
+string PokemonTypeToString(Type type) {
     switch (type) {
         case Electric:
             return "Electric";
@@ -79,8 +79,18 @@ Type Pokemon::getType() const{
 vector <Pokemon> Pokemon::getVec() const{
     return vec;
 }
+unsigned Pokemon::getHp() const{
+    return hp;
+}
+//sethp
+void Pokemon::setHp(unsigned hp){
+    this->hp = hp;
+}
 void Pokemon::setOwner(Player* owner){
     this->owner = owner;
+}
+Player* Pokemon::getOwner() const{
+    return owner;
 }
 //ability
 Ability::Ability(string _name, function<void()>_func): name(_name), func(_func) {
@@ -163,9 +173,42 @@ void Player::setCurrentPokemon(Pokemon* currentPokemon){
 Pokemon* Player::getCurrentPokemon() const{
     return currentPokemon;
 }
-void damage(Pokemon* p,int hp){
-    p->setHp(p->getHp() - hp);
+// extern vector <Pokemon> Pokemon::p_vec;
+// extern vector<Ability> Ability::a_vec;
+// extern Player player1;
+// extern Player player2;
+void damage(Pokemon p,int hp){
+    p.getOwner()->getCurrentPokemon()->setHp(p.getHp() - hp);
 }
-void heal(Pokemon* p,int hp){
-    p->setHp(p->getHp() + hp);
+void heal(Pokemon p,int hp){
+    p.getOwner()->getCurrentPokemon()->setHp(p.getHp() + hp);
 }
+void pokeball(Pokemon p, Dummy d){
+    Player* player= p.getOwner();
+    if(d.getI()){
+       player->setCurrentPokemon(NULL);
+       player->getP_vec().push_back(p);
+    }else{
+        //search in p_vec
+        for (unsigned i = 0; i < player->getP_vec().size(); i++) {
+            if (player->getP_vec()[i].getName() == p.getName()) {
+                player->setCurrentPokemon(&(player->getP_vec()[i]));
+                player->getP_vec().erase(player->getP_vec().begin() + i);
+                break;
+            }
+        }
+    }
+}
+int getHp(Pokemon p1,Pokemon p2){
+    p2.getName();
+    return p1.getHp();
+}
+string get_Type(Pokemon p1,Pokemon p2){
+    p2.getName();
+    return PokemonTypeToString(p1.getType());
+}
+string getName(Pokemon p1,Pokemon p2){
+    p2.getName();
+    return p1.getName();
+}
+

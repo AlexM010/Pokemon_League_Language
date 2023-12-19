@@ -1,11 +1,13 @@
 ﻿#include "PokemonLeague.h"
 
+
 Pokemon::Pokemon(){
     name = "";
     type = Undefined;
     hp = 0;
     vec = {};
 }
+
 Pokemon::Pokemon(string _name,string _type,unsigned _hp): name(_name), type(StringToPokemonType(_type)),hp(_hp) {
     if (name.empty()) {
         throw std::invalid_argument("Pokemon name cannot be empty");
@@ -212,3 +214,23 @@ string getName(Pokemon p1,Pokemon p2){
     return p1.getName();
 }
 
+Dummy::Dummy(int i = 0)
+{
+    this->i = i;
+}
+int Dummy::getI(){
+    return i;
+}
+Dummy& Dummy::operator-(Dummy x)
+{
+    x.getI();
+    return *this;
+}
+Dummy& Dummy::operator--()
+{
+    return *this;
+}
+Dummy& Dummy::operator-()
+{
+    return *this;
+}

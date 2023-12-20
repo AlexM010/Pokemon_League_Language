@@ -214,7 +214,7 @@ string getName(Pokemon p1,Pokemon p2){
     return p1.getName();
 }
 
-Dummy::Dummy(int i = 0)
+Dummy::Dummy(int i)
 {
     this->i = i;
 }

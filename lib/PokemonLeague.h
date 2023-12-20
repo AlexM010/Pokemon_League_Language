@@ -179,7 +179,7 @@ private:
 	int i;
 
 public:
-	Dummy(int);
+	Dummy(int i=0);
 	int getI();
     Dummy& operator-(Dummy x);
 	Dummy& operator--();

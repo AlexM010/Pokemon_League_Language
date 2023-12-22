@@ -50,14 +50,10 @@ BEGIN_GAME
         END_A
     }
     CREATE ABILITIES [
-        ABILITY{
-            NAME: "Electric_Shock",
+        ABILITY {
+            NAME: "Slash",
             ACTION: START
-                IF GET_HP(ATTACKER) < 30 DO
-                    HEAL ATTACKER 25
-                ELSE
-                    HEAL ATTACKER 15
-                END
+                DAMAGE DEFENDER 20
             END_A
         },
         ABILITY {
@@ -67,6 +63,28 @@ BEGIN_GAME
             END_A
         }
     ]
+    DEAR "Pikachu" LEARN [
+        ABILITY_NAME(Blaze)
+        ABILITY_NAME(Slash)
+        ABILITY_NAME(Electric_Shock)
+    ];
+    DEAR "Charmander" LEARN [
+        ABILITY_NAME(Solar_Power)
+        ABILITY_NAME(Blaze)
+        ABILITY_NAME(Slash)
+    ];
+    DEAR "Squirtle" LEARN [
+        ABILITY_NAME(Solar_Power)
+        ABILITY_NAME(Blaze)
+        ABILITY_NAME(Slash)
+    ];
+    //search the pikachu pokemon
+    for(unsigned i=0;i<Pokemon::p_vec.size();i++){
+        cout<<"--------------------------------------"<<endl;
+        Pokemon::p_vec[i].print();
+    }
+
+
     // CREATE ABILITY {
     //     NAME: "ability_name",
     //     ACTION: START

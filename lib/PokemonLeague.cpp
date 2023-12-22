@@ -29,6 +29,11 @@ void Pokemon::print() const{
         cout << "Type: " << PokemonTypeToString(vec[i].type) << endl;
         cout << "HP: " << vec[i].hp << endl;
     }
+    /*print abilities based on Abilities vector*/
+    for (unsigned i = 0; i < abilities.size(); i++) {
+        cout << "Ability: " << abilities[i].getName() << endl;
+    }
+
 }
 string PokemonTypeToString(Type type) {
     switch (type) {
@@ -71,6 +76,11 @@ Pokemon Pokemon::operator[](Pokemon a){
 
     return *this;
 }
+//addability
+void Pokemon::addAbility(Ability a){
+    abilities.push_back(a);
+}
+
 /*getters*/
 string Pokemon::getName() const{
     return name;
@@ -175,6 +185,30 @@ void Player::setCurrentPokemon(Pokemon* currentPokemon){
 Pokemon* Player::getCurrentPokemon() const{
     return currentPokemon;
 }
+Round::Round(function<void()> _player1, function<void()> _player2): player1(_player1), player2(_player2) {
+}
+void Round::play(int i){
+    if (i == 1) {
+        if(player1)
+            player1();
+    } else {
+        if(player2)
+            player2();
+    }
+}
+
+void Round::setPlayer1(function<void()> player1){
+    this->player1 = player1;
+}
+void Round::setPlayer2(function<void()> player2){
+    this->player2 = player2;
+}
+function<void()> Round::getPlayer1() const{
+    return player1;
+}
+function<void()> Round::getPlayer2() const{
+    return player2;
+}
 // extern vector <Pokemon> Pokemon::p_vec;
 // extern vector<Ability> Ability::a_vec;
 // extern Player player1;
@@ -214,7 +248,7 @@ string getName(Pokemon p1,Pokemon p2){
     return p1.getName();
 }
 
-Dummy::Dummy(int i = 0)
+Dummy::Dummy(int i)
 {
     this->i = i;
 }
@@ -233,4 +267,42 @@ Dummy& Dummy::operator--()
 Dummy& Dummy::operator-()
 {
     return *this;
+}
+extern Pokemon* learn;
+Dummy::Dummy(string str)
+{
+    bool exists=false;
+    for (unsigned i = 0; i < Ability::a_vec.size(); i++) {
+        if (Ability::a_vec[i].getName() == str) {
+            exists=true;
+            learn->addAbility(Ability::a_vec[i]);
+            break;
+        }
+    }
+    if (exists==false) {
+        throw std::invalid_argument("Ability not found");
+    }
+}
+//operator[] with int - do nothiung
+Dummy& Dummy::operator[](int index){
+    index++;
+    return *this;
+}
+Dummy& Dummy::operator[](Dummy d)
+{
+    d.getI();
+    return *this;
+}
+Dummy& Dummy::operator,(Dummy d)
+{
+    d.getI();
+    return *this;
+}
+Pokemon* search_pokemon(string str){
+    for (unsigned i = 0; i < Pokemon::p_vec.size(); i++) {
+        if (Pokemon::p_vec[i].getName() == str) {
+            return &Pokemon::p_vec[i];
+        }
+    }
+    throw std::invalid_argument("Pokemon not found");
 }

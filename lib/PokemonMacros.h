@@ -20,6 +20,7 @@ using namespace std;
 /* player2 : is a Player object for the second player */
 /* Pokemon::p_vec : is a static vector of Pokemon objects used for keeping track of all Pokemon objects */
 /* Ability::a_vec : is a static vector of Ability objects used for keeping track of all Ability objects */
+/* learn : is a pointer to aPokemon object used for storing inside the Pokemon object that is being learned abilities */
 /* rounds : is a vector of Round objects used for keeping the code that has to be executed each round
    because actions have code for multiple rounds (e.g. for-loops (FOR macro), AFTER macro)
 */
@@ -33,7 +34,7 @@ using namespace std;
     vector <Pokemon> Pokemon::p_vec;\
     vector <Ability> Ability::a_vec;\
     Pokemon* learn; \
-    vector <Round> rounds;\
+    vector <Round> Round::rounds;\
     int main(){\
         turn=1\
 
@@ -59,13 +60,9 @@ using namespace std;
 #define ACTION false?[]()->void{}
 /* Starting Action Macro used for declaring a lambda function which is a function used as action in an Ability */
 #define START []()->void{ \
-    _round++; \
-    if(rounds.size()<_round){\
-        rounds.push_back(Round()); \
-    } \
     Dummy(
 /* Ending Action Macro used for terminating the lambda function */
-#define END_A );}
+#define END );}
 /* Macro for naming a Pokemon Object - reducing to a string given */
 #define NAME false? ""
 /* Macro for giving a type to a Pokemon Object - reducing to a string given */
@@ -101,13 +98,20 @@ using namespace std;
 /* End of condition of an 'if' statement*/
 #define DO ){Dummy(
 /* End Macro */
-#define END );}Dummy(
+#define ENDIF );}Dummy(
 
 
 /* Logical Operation Macros */
 #define AND(x,y)    (x and y)
 #define OR(x,y)     (x or y)
 #define NOT(x)      (not x)
+
+/* Macro for creating a for loop */
+#define FOR );Round::addToVector(true,
+#define ROUNDS  ,turn,[](
+
+/* Macro for executing commands after N rounds */
+#define  AFTER  );Round::addToVector(false,
 
 /* Macros for learning a specific pokemon some abilities*/
 #define DEAR ;\
@@ -116,6 +120,8 @@ using namespace std;
     Dummy()
 #define ABILITY_NAME(x) -0],Dummy( #x )[1
 
+/* Macro for starting duel*/
+#define DUEL    ;duel()
 
 /* Macro for printing */
 #define SHOW cout<<

@@ -1,5 +1,57 @@
 ﻿#include "PokemonLeague.h"
 
+void duel(){
+    return;
+}
+void damage(Pokemon p,int hp){
+    p.getOwner()->getCurrentPokemon()->setHp(p.getHp() - hp);
+}
+
+void heal(Pokemon p,int hp){
+    p.getOwner()->getCurrentPokemon()->setHp(p.getHp() + hp);
+}
+
+void pokeball(Pokemon p, Dummy d){
+    Player* player= p.getOwner();
+    if(d.getI()){
+       player->setCurrentPokemon(NULL);
+       player->getP_vec().push_back(p);
+    }else{
+        //search in p_vec
+        for (unsigned i = 0; i < player->getP_vec().size(); i++) {
+            if (player->getP_vec()[i].getName() == p.getName()) {
+                player->setCurrentPokemon(&(player->getP_vec()[i]));
+                player->getP_vec().erase(player->getP_vec().begin() + i);
+                break;
+            }
+        }
+    }
+}
+
+int getHp(Pokemon p1,Pokemon p2){
+    p2.getName();
+    return p1.getHp();
+}
+
+string get_Type(Pokemon p1,Pokemon p2){
+    p2.getName();
+    return PokemonTypeToString(p1.getType());
+}
+
+string getName(Pokemon p1,Pokemon p2){
+    p2.getName();
+    return p1.getName();
+}
+
+Pokemon* search_pokemon(string str){
+    for (unsigned i = 0; i < Pokemon::p_vec.size(); i++) {
+        if (Pokemon::p_vec[i].getName() == str) {
+            return &Pokemon::p_vec[i];
+        }
+    }
+    throw std::invalid_argument("Pokemon not found");
+}
+
 
 Pokemon::Pokemon(){
     name = "";
@@ -35,6 +87,47 @@ void Pokemon::print() const{
     }
 
 }
+
+Pokemon Pokemon::operator,(Pokemon a){
+    vec.push_back(a);
+    return *this;
+}
+
+Pokemon Pokemon::operator[](Pokemon a){
+    vec.push_back(a);
+    for (unsigned i = 0; i < a.getVec().size(); i++) {
+        vec.push_back(a.getVec()[i]);
+    }
+
+    return *this;
+}
+
+void Pokemon::addAbility(Ability a){
+    abilities.push_back(a);
+}
+
+string Pokemon::getName() const{
+    return name;
+}
+Type Pokemon::getType() const{
+    return type;
+}
+vector <Pokemon> Pokemon::getVec() const{
+    return vec;
+}
+unsigned Pokemon::getHp() const{
+    return hp;
+}
+//sethp
+void Pokemon::setHp(unsigned hp){
+    this->hp = hp;
+}
+void Pokemon::setOwner(Player* owner){
+    this->owner = owner;
+}
+Player* Pokemon::getOwner() const{
+    return owner;
+}
 string PokemonTypeToString(Type type) {
     switch (type) {
         case Electric:
@@ -63,48 +156,8 @@ Type StringToPokemonType(const std::string& typeStr) {
     }
 }
 
-Pokemon Pokemon::operator,(Pokemon a){
-    vec.push_back(a);
-    return *this;
-}
 
-Pokemon Pokemon::operator[](Pokemon a){
-    vec.push_back(a);
-    for (unsigned i = 0; i < a.getVec().size(); i++) {
-        vec.push_back(a.getVec()[i]);
-    }
 
-    return *this;
-}
-//addability
-void Pokemon::addAbility(Ability a){
-    abilities.push_back(a);
-}
-
-/*getters*/
-string Pokemon::getName() const{
-    return name;
-}
-Type Pokemon::getType() const{
-    return type;
-}
-vector <Pokemon> Pokemon::getVec() const{
-    return vec;
-}
-unsigned Pokemon::getHp() const{
-    return hp;
-}
-//sethp
-void Pokemon::setHp(unsigned hp){
-    this->hp = hp;
-}
-void Pokemon::setOwner(Player* owner){
-    this->owner = owner;
-}
-Player* Pokemon::getOwner() const{
-    return owner;
-}
-//ability
 Ability::Ability(string _name, function<void()>_func): name(_name), func(_func) {
     if (name.empty()) {
         throw std::invalid_argument("Ability name cannot be empty");
@@ -142,6 +195,8 @@ void Ability::print() const{
         cout << "Ability: " << vec[i].name << endl;
     }
 }
+
+
 Player::Player(string _name): name(_name){
     if (name.empty()) {
         throw std::invalid_argument("Player name cannot be empty");
@@ -185,6 +240,8 @@ void Player::setCurrentPokemon(Pokemon* currentPokemon){
 Pokemon* Player::getCurrentPokemon() const{
     return currentPokemon;
 }
+
+
 Round::Round(function<void()> _player1, function<void()> _player2): player1(_player1), player2(_player2) {
 }
 void Round::play(int i){
@@ -209,44 +266,44 @@ function<void()> Round::getPlayer1() const{
 function<void()> Round::getPlayer2() const{
     return player2;
 }
+void Round::addToVector(bool for_or_after,unsigned _rounds,int turn,function<void()> fun){
+    if(for_or_after==true){     //for
+        for(unsigned i=0;i<_rounds;i++){
+            if(i>rounds.size()){
+                if(turn == 1){
+                    rounds.push_back(Round(fun,[](){}));
+                }else{
+                    rounds.push_back(Round([](){},fun));
+                }
+            }else{
+                if(turn == 1){
+                    rounds[i].setPlayer1(fun);
+                }else{
+                    rounds[i].setPlayer2(fun);
+                }
+            }
+        }
+    }else{  //after
+        for(unsigned i=0;i<_rounds;i++){
+            if(i>rounds.size()){
+                rounds.push_back(Round([](){},[](){}));
+            }else{
+                if(turn == 1){
+                    rounds[i].setPlayer2(fun);
+                }else{
+                    rounds[i].setPlayer1(fun);
+                }
+            }
+        }
+    }
+    
+    
+}
 // extern vector <Pokemon> Pokemon::p_vec;
 // extern vector<Ability> Ability::a_vec;
 // extern Player player1;
 // extern Player player2;
-void damage(Pokemon p,int hp){
-    p.getOwner()->getCurrentPokemon()->setHp(p.getHp() - hp);
-}
-void heal(Pokemon p,int hp){
-    p.getOwner()->getCurrentPokemon()->setHp(p.getHp() + hp);
-}
-void pokeball(Pokemon p, Dummy d){
-    Player* player= p.getOwner();
-    if(d.getI()){
-       player->setCurrentPokemon(NULL);
-       player->getP_vec().push_back(p);
-    }else{
-        //search in p_vec
-        for (unsigned i = 0; i < player->getP_vec().size(); i++) {
-            if (player->getP_vec()[i].getName() == p.getName()) {
-                player->setCurrentPokemon(&(player->getP_vec()[i]));
-                player->getP_vec().erase(player->getP_vec().begin() + i);
-                break;
-            }
-        }
-    }
-}
-int getHp(Pokemon p1,Pokemon p2){
-    p2.getName();
-    return p1.getHp();
-}
-string get_Type(Pokemon p1,Pokemon p2){
-    p2.getName();
-    return PokemonTypeToString(p1.getType());
-}
-string getName(Pokemon p1,Pokemon p2){
-    p2.getName();
-    return p1.getName();
-}
+
 
 Dummy::Dummy(int i)
 {
@@ -298,11 +355,4 @@ Dummy& Dummy::operator,(Dummy d)
     d.getI();
     return *this;
 }
-Pokemon* search_pokemon(string str){
-    for (unsigned i = 0; i < Pokemon::p_vec.size(); i++) {
-        if (Pokemon::p_vec[i].getName() == str) {
-            return &Pokemon::p_vec[i];
-        }
-    }
-    throw std::invalid_argument("Pokemon not found");
-}
+

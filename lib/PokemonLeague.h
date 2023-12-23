@@ -2,6 +2,14 @@
 #define POKEMON_LEAGUE_H
 
 #include "PokemonMacros.h"
+
+/* Class definitions*/
+class Pokemon;
+class Ability;
+class Player;
+class Round;
+class Dummy;
+
 /* Pokemon Type Enumerator*/
 typedef enum {
     Undefined,
@@ -11,44 +19,22 @@ typedef enum {
     Grass
 }Type;
 
-class Pokemon;
-class Ability;
-class Player;
-class Round;
-class Dummy;
-class Player{
-    private:
-        string name;
-        vector <Pokemon> p_vec;
-        Pokemon* currentPokemon;
-        Player* opponent;
-    public:
-        Player()=default;
-        Player(string _name);
-        string getName() const;
-        vector <Pokemon> getP_vec() const;
-        Player* getOpponent() const;
-        void setName(string name);
-        void setP_vec(vector <Pokemon> p_vec);
-        void setOpponent(Player* opponent);
-        void addPokemon(Pokemon p);
-        void givePokemon(string p);
-        void setCurrentPokemon(Pokemon* currentPokemon);
-        Pokemon* getCurrentPokemon() const;
-};
-class Round{
-    private:
-        function<void()> player1;
-        function<void()> player2;
-    public:
-        Round()=default;
-        Round(function<void()> _player1, function<void()> _player2);
-        void setPlayer1(function<void()> player1);
-        void setPlayer2(function<void()> player2);
-        function<void()> getPlayer1() const;
-        function<void()> getPlayer2() const;
-        void play(int);
-};
+/* Functions for damage, healing, and checking Pokemon's health */
+void damage(Pokemon,int);
+void heal(Pokemon,int);
+void pokeball(Pokemon p, Dummy d);
+
+/* Functions for getting Pokemon's type and name */
+int getHp(Pokemon p1,Pokemon p2);
+string get_Type(Pokemon p1,Pokemon p2);
+string getName(Pokemon p1,Pokemon p2);
+
+/* Function for searching declared Pokemons by name */
+Pokemon* search_pokemon(string str);
+
+/* Function for simulating a Pokemon duel */
+void duel();
+
 class Pokemon{
     public:
         Pokemon();
@@ -78,8 +64,11 @@ class Pokemon{
         vector <Ability> abilities;
 };
 
+
+/* Functions for converting string to Pokemon Type and vice versa */
 Type StringToPokemonType(const std::string& typeStr);
 std::string PokemonTypeToString(Type type);
+
 class Ability{
     private:
         string name;
@@ -100,6 +89,44 @@ class Ability{
         void setFunc(function<void()> func);
         void setVec(vector<Ability> vec);
 };
+
+class Player{
+    private:
+        string name;
+        vector <Pokemon> p_vec;
+        Pokemon* currentPokemon;
+        Player* opponent;
+    public:
+        Player()=default;
+        Player(string _name);
+        string getName() const;
+        vector <Pokemon> getP_vec() const;
+        Player* getOpponent() const;
+        void setName(string name);
+        void setP_vec(vector <Pokemon> p_vec);
+        void setOpponent(Player* opponent);
+        void addPokemon(Pokemon p);
+        void givePokemon(string p);
+        void setCurrentPokemon(Pokemon* currentPokemon);
+        Pokemon* getCurrentPokemon() const;
+};
+
+class Round{
+    private:
+        function<void()> player1;
+        function<void()> player2;
+    public:
+        Round()=default;
+        Round(function<void()> _player1, function<void()> _player2);
+        void setPlayer1(function<void()> player1);
+        void setPlayer2(function<void()> player2);
+        function<void()> getPlayer1() const;
+        function<void()> getPlayer2() const;
+        static vector <Round> rounds;
+        void play(int);
+        static void addToVector(bool for_or_after,unsigned _rounds,int turn,function<void()> fun);
+};
+
 class Dummy {
 private:
 	int i;
@@ -114,13 +141,5 @@ public:
     Dummy& operator[](int);
     Dummy& operator,(Dummy);
 };
-//comment above functions
 
-void damage(Pokemon,int);
-void heal(Pokemon,int);
-void pokeball(Pokemon p, Dummy d);
-int getHp(Pokemon p1,Pokemon p2);
-string get_Type(Pokemon p1,Pokemon p2);
-string getName(Pokemon p1,Pokemon p2);
-Pokemon* search_pokemon(string str);
 #endif // POKEMON_LEAGUE_H

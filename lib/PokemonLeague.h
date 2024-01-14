@@ -23,6 +23,7 @@ typedef enum {
 void damage(Pokemon,int);
 void heal(Pokemon,int);
 void pokeball(Pokemon p, Dummy d);
+void copyrights();
 
 /* Functions for getting Pokemon's type and name */
 int getHp(Pokemon p1,Pokemon p2);
@@ -35,17 +36,22 @@ Pokemon* search_pokemon(string str);
 /* Function for simulating a Pokemon duel */
 void duel();
 
+/* Function for printing the stats of each pokemon in the end of each round */
+void printStats(Pokemon *, Pokemon *);
+
 class Pokemon{
     public:
         Pokemon();
         Pokemon(string _name, string _type, unsigned _hp);
-        string getName() const;
+        string getName();
         Type getType() const;
         vector <Pokemon> getVec() const;
         unsigned getHp() const;
+        unsigned getMaxHp() const;
         void setName(string name);
         void setType(Type type);
         void setHp(unsigned hp);
+        void setMaxHp(unsigned maxHp);
         void print() const;
         Pokemon operator,(Pokemon p);
         Pokemon operator[](Pokemon p);
@@ -59,6 +65,7 @@ class Pokemon{
         string name;
         Type type;
         unsigned hp;
+        unsigned maxHp;
         vector <Pokemon> vec;
         Player* owner;
         vector <Ability> abilities;
@@ -93,17 +100,17 @@ class Ability{
 class Player{
     private:
         string name;
-        vector <Pokemon> p_vec;
+        Pokemon* p;
         Pokemon* currentPokemon;
         Player* opponent;
     public:
         Player()=default;
         Player(string _name);
         string getName() const;
-        vector <Pokemon> getP_vec() const;
+        Pokemon* getP();
         Player* getOpponent() const;
         void setName(string name);
-        void setP_vec(vector <Pokemon> p_vec);
+        void setP(Pokemon p);
         void setOpponent(Player* opponent);
         void addPokemon(Pokemon p);
         void givePokemon(string p);
@@ -122,7 +129,7 @@ class Round{
         void setPlayer2(function<void()> player2);
         function<void()> getPlayer1() const;
         function<void()> getPlayer2() const;
-        static vector <Round> rounds;
+        //static vector <Round> Rounds;
         void play(int);
         static void addToVector(bool for_or_after,unsigned _rounds,int turn,function<void()> fun);
 };

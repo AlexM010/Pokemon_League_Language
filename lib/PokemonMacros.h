@@ -6,6 +6,9 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 using namespace std;
 
@@ -25,6 +28,7 @@ using namespace std;
    because actions have code for multiple rounds (e.g. for-loops (FOR macro), AFTER macro)
 */
 #define BEGIN_GAME \
+    class Pokemon; \
     Dummy α(1);\
     Dummy _(0);\
     int turn=1;\
@@ -34,7 +38,8 @@ using namespace std;
     vector <Pokemon> Pokemon::p_vec;\
     vector <Ability> Ability::a_vec;\
     Pokemon* learn; \
-    vector <Round> Round::rounds;\
+    vector <Round> RoundsF;\
+    vector <Round> RoundsA;\
     int main(){\
         turn=1\
 
@@ -70,9 +75,9 @@ using namespace std;
 /* Macro for setting the health points (hp) to a Pokemon Object - reducing to an integer given */
 #define HP false? 0
 /* Macro for returning the attacking Pokemon Object based on the Player playing */
-#define ATTACKER *(turn==1?player1.getCurrentPokemon():player2.getCurrentPokemon()),
+#define ATTACKER *(turn==1?(player1.getCurrentPokemon()==NULL?new Pokemon():player1.getCurrentPokemon()):(player2.getCurrentPokemon()==NULL?new Pokemon():player2.getCurrentPokemon())),
 /* Macro for returning the defending Pokemon Object based on the Player playing */
-#define DEFENDER *(turn==2?player1.getCurrentPokemon():player2.getCurrentPokemon()),
+#define DEFENDER *(turn==1?(player2.getCurrentPokemon()==NULL?new Pokemon():player2.getCurrentPokemon()):(player1.getCurrentPokemon()==NULL?new Pokemon():player1.getCurrentPokemon())),
 /* Macro for dealing damage to a Pokemon Object */
 #define DAMAGE );damage(
 /* Macro for healing a Pokemon Object */
@@ -80,18 +85,18 @@ using namespace std;
 /* Macro for adding a Pokemon Object to a Player's vector of Pokemon Objects (Pokeball) */
 #define POKEBALL );pokeball(
 /* Macro for returning the health points (hp) of a Pokemon Object */
-#define GET_HP(x)  getHp(x Pokemon())
+#define GET_HP(x)  (getHp(x Pokemon()))
 /* Macro for returning the type of a Pokemon Object */
-#define GET_TYPE(x)  get_Type(x Pokemon())
+#define GET_TYPE(x)  (get_Type(x Pokemon()))
 /* Macro for returning the name of a Pokemon Object */
-#define GET_NAME(x)  getName(x Pokemon())
+#define GET_NAME(x)  (getName(x Pokemon()))
 /* Macro for returning if the Pokemon is in the Pokeball */
-#define IS_IN_POKEBALL(x)   (x Pokemon()==NULL)
+#define IS_IN_POKEBALL(x)   (get_Type(x Pokemon())==string("Undefined"))
 
 
 /* If Macro */
-#define IF );if(
 /* Else If Macro */
+#define IF );if(
 #define ELSE_IF );}else if(
 /* Else Macro */
 #define ELSE );}else{Dummy(
@@ -108,7 +113,7 @@ using namespace std;
 
 /* Macro for creating a for loop */
 #define FOR );Round::addToVector(true,
-#define ROUNDS  ,turn,[](
+#define ROUNDS  -1,turn,[](
 
 /* Macro for executing commands after N rounds */
 #define  AFTER  );Round::addToVector(false,
@@ -124,6 +129,6 @@ using namespace std;
 #define DUEL    ;duel()
 
 /* Macro for printing */
-#define SHOW cout<<
+#define SHOW );(cout<<
 
 #endif // POKEMON_MACROS_H
